@@ -1,5 +1,6 @@
 import express from "express";
 import { getAirbnbPorCountry, getAllAirbnb , getAirbnPorId} from "../data/airbnb.js";
+import { auth } from "../middleware/auth.js";
 
 const router = express.Router();
 
@@ -11,7 +12,7 @@ router.get("/", async (req, res) => {
 });
 
 
-router.get("/country/:country", async (req, res) => {
+router.get("/country/:country", auth, async (req, res) => {
   try {   
     const airbnbs = await getAirbnbPorCountry(req.params.country);
     res.json(airbnbs);
