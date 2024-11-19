@@ -1,5 +1,5 @@
 import express from "express";
-import { getAirbnbPorCountry, getAllAirbnb , getAirbnPorId} from "../data/airbnb.js";
+import { getAirbnbPorCountry, getAllAirbnb , getAirbnbPorId} from "../data/airbnb.js";
 import { auth } from "../middleware/auth.js";
 
 const router = express.Router();
@@ -25,7 +25,7 @@ router.get("/country/:country", auth, async (req, res) => {
 
 router.get("/:id", async (req, res) => {
   try {
-    const airbnb = await getAirbnPorId(req.params.id);
+    const airbnb = await getAirbnbPorId(req.params.id);
     if (airbnb) {
       res.json(airbnb);
     } else {

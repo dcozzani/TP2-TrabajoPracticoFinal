@@ -1,6 +1,7 @@
 import "dotenv/config";
 import express from "express";
 import airbnbRouter from "./routes/airbnb.js";
+import userRouter from "./routes/user.js";
 
 const PORT = process.env.PORT;
 const app = express();
