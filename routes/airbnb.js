@@ -12,7 +12,7 @@ router.get("/", async (req, res) => {
 });
 
 
-router.get("/country/:country", auth, async (req, res) => {
+router.get("/country/:country", async (req, res) => {
   try {   
     const airbnbs = await getAirbnbPorCountry(req.params.country);
     res.json(airbnbs);
@@ -36,5 +36,28 @@ router.get("/:id", async (req, res) => {
   }
 });
 
+
+router.post("/:id/reviews", auth, async (req, res) => {
+  const listingId = req.params.id;
+  const { reviewer_id, reviewer_name, comments } = req.body;
+
+  try {
+    // Validar los datos del review
+    if (!reviewer_id || !reviewer_name || !comments) {
+      return res.status(400).send("Todos los campos son obligatorios.");
+    }
+
+    // Llamar a la función para agregar el review
+    const newReview = await addReview(listingId, {
+      reviewer_id,
+      reviewer_name,
+      comments,
+    });
+
+    res.status(201).send(newReview);
+  } catch (error) {
+    res.status(500).send(error.message);
+  }
+});
 
 export default router;
