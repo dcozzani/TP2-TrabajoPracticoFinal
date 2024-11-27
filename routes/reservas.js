@@ -5,7 +5,7 @@ import { auth } from "../middleware/auth.js";
 const router = express.Router();
 
 // Ruta para crear una nueva reserva
-router.post('/reservar', async (req, res) => {
+router.post('/reservar', auth, async (req, res) => {
   const { id, usuario, fechaDesde, fechaHasta } = req.body;
   try {
     const reservaId = await reservarAirbnb(id, usuario, fechaDesde, fechaHasta);
@@ -16,7 +16,7 @@ router.post('/reservar', async (req, res) => {
 });
 
 // Ruta para listar reservas por usuario
-router.get('/usuario/:usuarioId', async (req, res) => {
+router.get('/usuario/:usuarioId', auth, async (req, res) => {
   const { usuarioId } = req.params;
   try {
     const reservas = await getReservasPorUsuario(usuarioId);
@@ -31,7 +31,7 @@ router.get('/usuario/:usuarioId', async (req, res) => {
 });
 
 // Ruta para obtener una reserva por ID
-router.get('/:id', async (req, res) => {
+router.get('/:id', auth, async (req, res) => {
   const { id } = req.params;
   try {
     const reserva = await getReservaPorId(id);
@@ -44,5 +44,16 @@ router.get('/:id', async (req, res) => {
     res.status(400).json({ message: error.message });
   }
 });
+
+// Ruta para cancelar una reserva
+router.delete('/cancelar/:reservaId', auth, async (req, res) => {
+    const { reservaId } = req.params;
+    try {
+      const message = await cancelarReserva(reservaId);
+      res.status(200).json({ message });
+    } catch (error) {
+      res.status(400).json({ message: error.message });
+    }
+  });
 
 export default router;

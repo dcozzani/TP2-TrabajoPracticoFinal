@@ -55,8 +55,12 @@ export async function getAllAirbnb(pageSize, page) {
       .db(DATABASE)
       .collection(LISTADOAIRBNB)
       .updateOne(
-        { _id: listingId }, // Buscar el documento por ID
-        { $push: { reviews: newReview } } // Agregar el review al array embebido
+        { _id: new ObjectId(listingId) },
+        { 
+          $push: { reviews: newReview } , // Agregar el review al array
+          $set: { last_review: newReview.date } // Actualizar la fecha del último review
+        } 
+
       );
   
     if (result.modifiedCount === 0) {
@@ -64,4 +68,27 @@ export async function getAllAirbnb(pageSize, page) {
     }
   
     return newReview;
+  }
+
+  export async function getAirbnbPorRangoDePrecio(precioDesde, precioHasta) {
+    const connectiondb = await getConnection();
+
+      // Valido que el orden de los parametros sea correcto
+      // sino los intercambio
+    if (precioDesde > precioHasta) {
+      [precioDesde, precioHasta] = [precioHasta, precioDesde];
+    }
+  
+    const airbnbs = await connectiondb
+      .db(DATABASE)
+      .collection(LISTADOAIRBNB)
+      .find({
+        price: { 
+          $gte: Decimal128.fromString(precioDesde.toString()), 
+          $lte: Decimal128.fromString(precioHasta.toString()) 
+        }
+      })
+      .toArray();
+  
+    return airbnbs;
   }
