@@ -1,10 +1,12 @@
 import { getConnection } from './database'; // Asegúrate de ajustar la ruta según tu estructura de proyecto
 import { ObjectId } from 'mongodb';
 
+const RESERVAS = "reservas";
+
 async function verificarReservasSuperpuestas(connectiondb, id, fechaInicio, fechaFin) {
   return await connectiondb
     .db(DATABASE)
-    .collection("reservas")
+    .collection(RESERVAS)
     .find({
       airbnbId: new ObjectId(id),
       $or: [
@@ -19,7 +21,7 @@ export async function getReservaPorId(id) {
 
   return await connectiondb
     .db(DATABASE)
-    .collection("reservas")
+    .collection(RESERVAS)
     .findOne({ _id: new ObjectId(id) });
 }	
 
@@ -28,7 +30,7 @@ export async function getReservasPorUsuario(usuario) {
 
   return await connectiondb
     .db(DATABASE)
-    .collection("reservas")
+    .collection(RESERVAS)
     .find({ usuario: usuario })
     .toArray();
 }
@@ -62,8 +64,27 @@ export async function reservarAirbnb(id, usuario, fechaDesde, fechaHasta) {
 
   const result = await connectiondb
     .db(DATABASE)
-    .collection("reservas")
+    .collection(RESERVAS)
     .insertOne(reserva);
 
   return result.insertedId;
 }
+
+export async function listarReservasPorUsuario(usuarioId) {
+  const connectiondb = await getConnection();
+
+  const reservas = await connectiondb
+    .db(DATABASE)
+    .collection(RESERVAS)
+    .find({ usuario: usuarioId })
+    .toArray();
+
+  if (reservas.length === 0) {
+    return "No se encontraron reservas para el usuario especificado.";
+  }
+
+  return reservas;
+}
+
+
+
