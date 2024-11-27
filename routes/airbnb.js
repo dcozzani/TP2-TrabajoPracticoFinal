@@ -1,5 +1,5 @@
 import express from "express";
-import { getAirbnbPorCountry, getAllAirbnb , getAirbnbPorId, addReview, getAirbnbPorRangoDePrecio} from "../data/airbnb.js";
+import { getAirbnbPorCountry, getAllAirbnb , getAirbnbPorId, addReview, getAirbnbPorRangoDePrecio, getReviewsPorAirbnb} from "../data/airbnb.js";
 import { auth } from "../middleware/auth.js";
 
 const router = express.Router();
@@ -37,7 +37,7 @@ router.get("/:id", async (req, res) => {
 });
 
 
-router.post("/:id/reviews", auth, async (req, res) => {
+router.post("/:id/addReview", auth, async (req, res) => {
   const listingId = req.params.id;
   const { reviewer_id, reviewer_name, comments } = req.body;
 
@@ -68,6 +68,16 @@ router.get("/price", async (req, res) => {
     res.status(200).json(airbnbs);
   } catch (error) {
     res.status(500).send("Error obteniendo los airbnb por rango de precio");
+  }
+});
+
+router.get("/:id/reviews", async (req, res) => {
+  const listingId = req.params.id;
+  try {
+    const reviews = await getReviewsPorAirbnb(listingId);
+    res.status(200).json(reviews);
+  } catch (error) {
+    res.status(500).send(error.message);
   }
 });
 

@@ -93,3 +93,33 @@ export async function getAllAirbnb(pageSize, page) {
   
     return airbnbs;
   }
+
+  export async function getReviewsPorAirbnb(listingId) {
+    const connectiondb = await getConnection();
+  
+    // Buscar el listado de Airbnb por su ID y proyectar los campos necesarios
+    const airbnb = await connectiondb
+      .db(DATABASE)
+      .collection(LISTADOAIRBNB)
+      .findOne(
+        { _id: new ObjectId(listingId) },
+        { projection: { reviews: 1, listing_url: 1, name: 1 } }
+      );
+  
+    if (!airbnb) {
+      throw new Error("El Airbnb especificado no existe.");
+    }
+  
+    // Ordenar las reviews de la más nueva a la más vieja
+    const reviewsOrdenadas = airbnb.reviews.sort((a, b) => new Date(b.date) - new Date(a.date));
+  
+    // Armo la estructura a mostrar
+    const response = {
+      ID: airbnb._id,
+      listing_url: airbnb.listing_url,
+      name: airbnb.name,
+      reviews: reviewsOrdenadas
+    };
+  
+    return response;
+  }
