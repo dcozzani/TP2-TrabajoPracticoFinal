@@ -2,6 +2,7 @@ import { getConnection } from './database'; // Asegúrate de ajustar la ruta seg
 import { ObjectId } from 'mongodb';
 import { getAirbnbPorId } from './airbnb';
 
+const DATABASE = "sample_airbnb";
 const RESERVAS = "reservas";
 
 async function verificarReservasSuperpuestas(connectiondb, id, fechaInicio, fechaFin) {
