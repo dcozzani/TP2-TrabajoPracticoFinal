@@ -5,6 +5,12 @@ import { getAirbnbPorId } from './airbnb';
 const RESERVAS = "reservas";
 
 async function verificarReservasSuperpuestas(connectiondb, id, fechaInicio, fechaFin) {
+  // valido que la fecha de inicio sea menor a la fecha de fin
+  // sino las intercambio
+  if (fechaInicio > fechaFin) {
+    [fechaInicio, fechaFin] = [fechaFin, fechaInicio];
+  }
+
   return await connectiondb
     .db(DATABASE)
     .collection(RESERVAS)
