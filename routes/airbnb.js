@@ -1,5 +1,5 @@
 import express from "express";
-import { getAirbnbPorCountry, getAllAirbnb , getAirbnbPorId, addReview} from "../data/airbnb.js";
+import { getAirbnbPorCountry, getAllAirbnb , getAirbnbPorId, addReview, getAirbnbPorRangoDePrecio} from "../data/airbnb.js";
 import { auth } from "../middleware/auth.js";
 
 const router = express.Router();
@@ -54,21 +54,12 @@ router.post("/:id/reviews", auth, async (req, res) => {
       comments,
     });
 
-    res.status(201).send(newReview);
+    res.status(201).json({ message: 'Review agregado con éxito', newReview });
   } catch (error) {
     res.status(500).send(error.message);
   }
 });
 
-router.post('/addReview', async (req, res) => {
-  const { listingId, review } = req.body;
-  try {
-    const newReview = await addReview(listingId, review);
-    res.status(201).json({ message: 'Review agregado con éxito', newReview });
-  } catch (error) {
-    res.status(400).json({ message: error.message });
-  }
-});
 
 router.get("/price", async (req, res) => {
   const { precioDesde, precioHasta } = req.query;

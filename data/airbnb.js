@@ -1,5 +1,6 @@
 import getConnection from "./conn.js";
 import { ObjectId } from "mongodb";
+
 const DATABASE = "sample_airbnb";
 const LISTADOAIRBNB = "listingsAndReviews";
 

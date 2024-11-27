@@ -1,5 +1,5 @@
 import express from 'express';
-import { reservarAirbnb, getReservasPorUsuario, verificarReservasSuperpuestas, getReservaPorId } from '../data/reservas';
+import { reservarAirbnb, getReservasPorUsuario, verificarReservasSuperpuestas, getReservaPorId, cancelarReserva } from '../data/reservas';
 import { auth } from "../middleware/auth.js";
 
 const router = express.Router();
