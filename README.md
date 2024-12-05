@@ -103,10 +103,10 @@ Respuesta: Token de autenticación.
    }  
 Ejecuta la petición y verifica que el usuario se cree correctamente.  
 ### **2. Autenticar al usuario**  
-**Método**: POST  
-**URL**: http://localhost:3000/user/login  
+**Método**: `POST`  
+**URL**: `http://localhost:3000/user/login`  
 **Body**:  
-json  
+```json  
 {  
   "email": "usuario1@example.com",  
   "password": "contraseña123"  
@@ -114,31 +114,31 @@ json
 Ejecuta la petición y copia el token del campo token en la respuesta.  
 ### **3. Buscar Airbnbs**  
 **a. Listar todos los alojamientos**  
-**Método**: GET  
-**URL**: http://localhost:3000/airbnb/  
+**Método**: `GET`  
+**URL**: `http://localhost:3000/airbnb/`  
 Query Params:  
 pageSize=10  
 page=0  
 Ejecuta la petición y selecciona un alojamiento (id) para usarlo en los pasos siguientes.  
 **b. Filtrar por país**  
-**Método**: GET  
-**URL**: http://localhost:3000/airbnb/country/Argentina  
+**Método**: `GET`  
+**URL**: `http://localhost:3000/airbnb/country/Argentina`  
 Ejecuta la petición y valida los resultados.  
 **c. Buscar por rango de precio**  
-**Método**: GET  
-**URL**: http://localhost:3000/airbnb/price  
+**Método**: `GET`  
+**URL**: `http://localhost:3000/airbnb/price`  
 Query Params:  
 precioDesde=50  
 precioHasta=200  
 Ejecuta la petición.  
 ### **4. Agregar una reseña**  
-**Método**: POST  
-**URL**: http://localhost:3000/airbnb/:id/addReview  
+**Método**: `POST`  
+**URL**: `http://localhost:3000/airbnb/:id/addReview`  
 Reemplazar :ID del alojamiento.  
 **Headers**:  
 **Authorization**: Bearer <token> (usa el token obtenido en el paso 2).  
 **Body**:  
-json  
+```json  
 {  
   "reviewer_id": "12345",  
   "reviewer_name": "Usuario Prueba",  
@@ -146,12 +146,12 @@ json
 }  
 Ejecuta la petición y verifica que la reseña se haya agregado.  
 ### **5. Reservar un Airbnb**   
-**Método**: POST  
-**URL**: http://localhost:3000/reservas/reservar  
+**Método**: `POST`  
+**URL**: `http://localhost:3000/reservas/reservar`  
 **Headers**:  
 **Authorization**: Bearer <token> (token obtenido en el paso 2).  
 **Body**:  
-json  
+```json  
 {  
   "id": "<airbnbId>",  
   "usuario": "usuario1@example.com",  
@@ -169,8 +169,8 @@ Usa el endpoint POST /reservas/reservar con el token del segundo usuario y las m
 Resultado esperado: El sistema debe rechazar la reserva porque las fechas se superponen.  
 ### **7. Cancelar una reserva**  
 Autentica nuevamente al primer usuario (usuario1@example.com).  
-**Método**: DELETE  
-**URL**: http://localhost:3000/reservas/cancelar/:reservaId  
+**Método**: `DELETE`  
+**URL**: `http://localhost:3000/reservas/cancelar/:reservaId`  
 Reemplazar :reservaId con el ID de la reserva obtenida en el paso 5.  
 **Headers**:  
 **Authorization**: Bearer <token> (usa el token del usuario 1).  
