@@ -103,10 +103,10 @@ Respuesta: Token de autenticación.
    }  
 Ejecuta la petición y verifica que el usuario se cree correctamente.  
 ### **2. Autenticar al usuario**  
-**Método**: `POST`  
-**URL**: `http://localhost:3000/user/login`  
-**Body**:  
-```json  
+1. **Método**: `POST`  
+2. **URL**: `http://localhost:3000/user/login`  
+3. **Body**:  
+   ```json  
 {  
   "email": "usuario1@example.com",  
   "password": "contraseña123"  
@@ -132,13 +132,13 @@ precioDesde=50
 precioHasta=200  
 Ejecuta la petición.  
 ### **4. Agregar una reseña**  
-**Método**: `POST`  
-**URL**: `http://localhost:3000/airbnb/:id/addReview`  
-Reemplazar :ID del alojamiento.  
-**Headers**:  
-**Authorization**: Bearer <token> (usa el token obtenido en el paso 2).  
-**Body**:  
-```json  
+1. **Método**: `POST`  
+2. **URL**: `http://localhost:3000/airbnb/:id/addReview`  
+3. Reemplazar :ID del alojamiento.  
+4. **Headers**:  
+5. **Authorization**: Bearer <token> (usa el token obtenido en el paso 2).  
+6. **Body**:  
+   ```json  
 {  
   "reviewer_id": "12345",  
   "reviewer_name": "Usuario Prueba",  
@@ -146,12 +146,12 @@ Reemplazar :ID del alojamiento.
 }  
 Ejecuta la petición y verifica que la reseña se haya agregado.  
 ### **5. Reservar un Airbnb**   
-**Método**: `POST`  
-**URL**: `http://localhost:3000/reservas/reservar`  
-**Headers**:  
-**Authorization**: Bearer <token> (token obtenido en el paso 2).  
-**Body**:  
-```json  
+1. **Método**: `POST`  
+2. **URL**: `http://localhost:3000/reservas/reservar`  
+3. **Headers**:  
+4. **Authorization**: Bearer <token> (token obtenido en el paso 2).  
+5. **Body**:  
+   ```json  
 {  
   "id": "<airbnbId>",  
   "usuario": "usuario1@example.com",  
