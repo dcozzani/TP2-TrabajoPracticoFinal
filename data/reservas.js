@@ -1,6 +1,6 @@
-import { getConnection } from './database'; // Asegúrate de ajustar la ruta según tu estructura de proyecto
+import getConnection from "./conn.js";
 import { ObjectId } from 'mongodb';
-import { getAirbnbPorId } from './airbnb';
+import { getAirbnbPorId } from './airbnb.js';
 
 const DATABASE = "sample_airbnb";
 const RESERVAS = "reservas";
