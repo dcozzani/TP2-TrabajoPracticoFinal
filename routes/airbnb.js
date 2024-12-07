@@ -22,17 +22,33 @@ router.get("/country/:country", async (req, res) => {
 
 })
 
+router.get("/price", async (req, res) => {
+  const { precioDesde, precioHasta } = req.query;
+  try {
+    if (!precioDesde || !precioHasta) {
+      return res.status(400).send("Debe proporcionar un precio inicial y un precio maximo.");
+    }
+
+    const airbnbs = await getAirbnbPorRangoDePrecio(precioDesde, precioHasta);
+    res.status(200).json(airbnbs);
+  } catch (error) {
+    console.error("Error obteniendo los airbnb por rango de precio:", error);
+    res.status(500).send(`Error obteniendo los airbnb por rango de precio: ${error.message}`);
+  }
+});
+
 
 router.get("/:id", async (req, res) => {
   try {
     const airbnb = await getAirbnbPorId(req.params.id);
     if (airbnb) {
-      res.json(airbnb);
+      res.status(200).json(airbnb);
     } else {
       res.status(404).send("No se encontro el Airbnb");
     }
   } catch (error) {
-    res.status(500).send("Error obteniendo el Airbnb");
+    console.error("Error obteniendo el Airbnb:", error);
+    res.status(500).send(`Error obteniendo el Airbnb: ${error.message}`);
   }
 });
 
@@ -60,16 +76,6 @@ router.post("/:id/addReview", auth, async (req, res) => {
   }
 });
 
-
-router.get("/price", async (req, res) => {
-  const { precioDesde, precioHasta } = req.query;
-  try {
-    const airbnbs = await getAirbnbPorRangoDePrecio(precioDesde, precioHasta);
-    res.status(200).json(airbnbs);
-  } catch (error) {
-    res.status(500).send("Error obteniendo los airbnb por rango de precio");
-  }
-});
 
 router.get("/:id/reviews", async (req, res) => {
   const listingId = req.params.id;

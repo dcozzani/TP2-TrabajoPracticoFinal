@@ -1,5 +1,5 @@
 import getConnection from "./conn.js";
-import { ObjectId } from "mongodb";
+import { ObjectId, Decimal128 } from "mongodb";
 
 const DATABASE = "sample_airbnb";
 const LISTADOAIRBNB = "listingsAndReviews";
@@ -18,12 +18,19 @@ export async function getAllAirbnb(pageSize, page) {
 
   export async function getAirbnbPorId(id) {
     const connectiondb = await getConnection();
-    const airbnb = await connectiondb
-      .db(DATABASE)
-      .collection(LISTADOAIRBNB)
-      .findOne({ _id: new ObjectId(id) });
   
-    return airbnb;
+    try {
+  
+      const airbnb = await connectiondb
+        .db(DATABASE)
+        .collection(LISTADOAIRBNB)
+        .findOne({_id: id });
+  
+      return airbnb;
+    } catch (error) {
+      console.error("Error en getAirbnbPorId:", error);
+      throw new Error("Error obteniendo el Airbnb por ID");
+    }
   }
   
   
@@ -73,25 +80,32 @@ export async function getAllAirbnb(pageSize, page) {
 
   export async function getAirbnbPorRangoDePrecio(precioDesde, precioHasta) {
     const connectiondb = await getConnection();
+    let preciosIntercambiados = false;
 
       // Valido que el orden de los parametros sea correcto
       // sino los intercambio
     if (precioDesde > precioHasta) {
       [precioDesde, precioHasta] = [precioHasta, precioDesde];
+      preciosIntercambiados = true;
     }
+
+    try {
+      const airbnbs = await connectiondb
+        .db(DATABASE)
+        .collection(LISTADOAIRBNB)
+        .find({
+          price: { 
+            $gte: Decimal128.fromString(precioDesde.toString()), 
+            $lte: Decimal128.fromString(precioHasta.toString()) 
+          }
+        })
+        .toArray();
   
-    const airbnbs = await connectiondb
-      .db(DATABASE)
-      .collection(LISTADOAIRBNB)
-      .find({
-        price: { 
-          $gte: Decimal128.fromString(precioDesde.toString()), 
-          $lte: Decimal128.fromString(precioHasta.toString()) 
-        }
-      })
-      .toArray();
-  
-    return airbnbs;
+      return { airbnbs, preciosIntercambiados };
+    } catch (error) {
+      console.error("Error en getAirbnbPorRangoDePrecio:", error);
+      throw new Error("Error obteniendo los airbnb por rango de precio");
+    }
   }
 
   export async function getReviewsPorAirbnb(listingId) {

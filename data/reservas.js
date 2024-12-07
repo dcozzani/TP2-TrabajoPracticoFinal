@@ -16,7 +16,7 @@ async function verificarReservasSuperpuestas(connectiondb, id, fechaInicio, fech
     .db(DATABASE)
     .collection(RESERVAS)
     .find({
-      airbnbId: new ObjectId(id),
+      airbnbId: id,
       $or: [
         { fechaDesde: { $lt: fechaFin }, fechaHasta: { $gt: fechaInicio } }
       ]
@@ -63,16 +63,20 @@ export async function reservarAirbnb(id, usuario, fechaDesde, fechaHasta) {
     throw new Error("El Airbnb especificado no existe.");
   }
 
+  if (isNaN(fechaInicio.getTime()) || isNaN(fechaFin.getTime())) {
+    throw new Error("Las fechas proporcionadas no son válidas.");
+  }
+
   // Calcular la cantidad de noches - El resultado de la resta de las fechas lo devuelve
   // en milisegundos, por lo que se divide por la cantidad de milisegundos en un día
   const noches = (fechaFin - fechaInicio) / (1000 * 60 * 60 * 24);
 
   // Verificar las restricciones de noches mínimas y máximas
   if (noches < airbnb.minimum_nights) {
-    throw new Error(`La cantidad mínima de noches para reservar es ${airbnb.minimum_nights}.`);
+    throw new Error(`La cantidad mínima de noches para reservar es ${airbnb.minimum_nights} noches.`);
   }
   if (noches > airbnb.maximum_nights) {
-    throw new Error(`La cantidad máxima de noches para reservar es ${airbnb.maximum_nights}.`);
+    throw new Error(`La cantidad máxima de noches para reservar es ${airbnb.maximum_nights} noches.`);
   }
 
   const reservasSuperpuestas = await verificarReservasSuperpuestas(connectiondb, id, fechaInicio, fechaFin);
@@ -86,7 +90,7 @@ export async function reservarAirbnb(id, usuario, fechaDesde, fechaHasta) {
     usuario: usuario,
     fechaDesde: fechaInicio,
     fechaHasta: fechaFin,
-    airbnbId: new ObjectId(id)
+    airbnbId: id
   };
 
   const result = await connectiondb
