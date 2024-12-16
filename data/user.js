@@ -16,6 +16,7 @@ export async function addUser(user) {
   if (existingUser) {
     throw new Error("El correo electrónico ya está registrado.");
   }
+
   user.password = await bcryptjs.hash(user.password, 10);
   
 
@@ -24,6 +25,18 @@ export async function addUser(user) {
     .collection(LISTADOUSUARIOS)
     .insertOne(user);
   return result;
+}
+
+export async function listarTodosLosUsuarios() {
+  const clientMongo = await getConnection();
+
+  const usuarios = await clientMongo
+    .db(DATABASE)
+    .collection(LISTADOUSUARIOS)
+    .find({})
+    .toArray();
+
+  return usuarios;
 }
 
 export async function findByCredentials(email, password) {
