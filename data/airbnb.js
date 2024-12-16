@@ -80,14 +80,11 @@ export async function getAllAirbnb(pageSize, page) {
 
   export async function getAirbnbPorRangoDePrecio(precioDesde, precioHasta) {
     const connectiondb = await getConnection();
-    let preciosIntercambiados = false;
 
-      // Valido que el orden de los parametros sea correcto
-      // sino los intercambio
-    if (precioDesde > precioHasta) {
-      [precioDesde, precioHasta] = [precioHasta, precioDesde];
-      preciosIntercambiados = true;
-    }
+    // Validar que el orden de los parámetros sea correcto
+  if (precioDesde > precioHasta) {
+    throw new Error("El precioDesde debe ser menor o igual que el precioHasta.");
+  }
 
     try {
       const airbnbs = await connectiondb
@@ -95,13 +92,14 @@ export async function getAllAirbnb(pageSize, page) {
         .collection(LISTADOAIRBNB)
         .find({
           price: { 
+            // se agregar el cambio de tipo de dato por como esta en la base de datos
             $gte: Decimal128.fromString(precioDesde.toString()), 
             $lte: Decimal128.fromString(precioHasta.toString()) 
           }
         })
         .toArray();
   
-      return { airbnbs, preciosIntercambiados };
+      return { airbnbs };
     } catch (error) {
       console.error("Error en getAirbnbPorRangoDePrecio:", error);
       throw new Error("Error obteniendo los airbnb por rango de precio");
