@@ -1,8 +1,8 @@
 import getConnection from "./conn.js";
 import { ObjectId, Decimal128 } from "mongodb";
 
-const DATABASE = "sample_airbnb";
-const LISTADOAIRBNB = "listingsAndReviews";
+const DATABASE = process.env.DATABASE;
+const LISTADOAIRBNB = process.env.LISTADOAIRBNB;
 
 export async function getAllAirbnb(pageSize, page) {
     const connectiondb = await getConnection();

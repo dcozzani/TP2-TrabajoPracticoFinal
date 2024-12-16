@@ -2,8 +2,8 @@ import getConnection from "./conn.js";
 import { ObjectId } from 'mongodb';
 import { getAirbnbPorId } from './airbnb.js';
 
-const DATABASE = "sample_airbnb";
-const RESERVAS = "reservas";
+const DATABASE = process.env.DATABASE;
+const RESERVAS = process.env.RESERVAS;
 
 async function verificarReservasSuperpuestas(connectiondb, id, fechaInicio, fechaFin) {
   // valido que la fecha de inicio sea menor a la fecha de fin
@@ -63,6 +63,7 @@ export async function reservarAirbnb(id, usuario, fechaDesde, fechaHasta) {
     throw new Error("El Airbnb especificado no existe.");
   }
 
+  // se validan con el isNaN para que el usuario no pueda poner fechas invalidas
   if (isNaN(fechaInicio.getTime()) || isNaN(fechaFin.getTime())) {
     throw new Error("Las fechas proporcionadas no son válidas.");
   }

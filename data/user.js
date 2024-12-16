@@ -2,8 +2,8 @@ import getConnection from "./conn.js";
 import bcryptjs from "bcryptjs";
 import jwt from "jsonwebtoken";
 
-const DATABASE = "sample_airbnb";
-const LISTADOUSUARIOS = "users";
+const DATABASE = process.env.DATABASE;
+const LISTADOUSUARIOS = process.env.LISTADOUSUARIOS;
 
 export async function addUser(user) {
   const clientMongo = await getConnection();
