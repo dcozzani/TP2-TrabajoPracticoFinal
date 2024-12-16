@@ -49,7 +49,7 @@ export async function reservarAirbnb(id, usuario, fechaDesde, fechaHasta) {
   if (!id || !usuario || !fechaDesde || !fechaHasta) {
     throw new Error("Todos los parámetros son obligatorios.");
   }
-  if (new Date(fechaDesde) >= new Date(fechaHasta)) {
+  if (new Date(fechaDesde) > new Date(fechaHasta)) {
     throw new Error("La fecha de inicio debe ser anterior a la fecha de fin.");
   }
 
