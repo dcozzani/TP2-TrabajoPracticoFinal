@@ -63,7 +63,7 @@ export async function getAllAirbnb(pageSize, page) {
       .db(DATABASE)
       .collection(LISTADOAIRBNB)
       .updateOne(
-        { _id: new ObjectId(listingId) },
+        { _id: listingId },
         { 
           $push: { reviews: newReview } , // Agregar el review al array
           $set: { last_review: newReview.date } // Actualizar la fecha del último review
@@ -114,7 +114,7 @@ export async function getAllAirbnb(pageSize, page) {
       .db(DATABASE)
       .collection(LISTADOAIRBNB)
       .findOne(
-        { _id: new ObjectId(listingId) },
+        { _id: listingId },
         { projection: { reviews: 1, listing_url: 1, name: 1 } }
       );
   
