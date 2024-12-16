@@ -58,7 +58,7 @@ export async function getAllAirbnb(pageSize, page) {
       comments: review.comments,
     };
   
-    // Actualizar el documento correspondiente con el nuevo review
+    // Actualizar el airbnb correspondiente con el nuevo review
     const result = await clientMongo
       .db(DATABASE)
       .collection(LISTADOAIRBNB)
