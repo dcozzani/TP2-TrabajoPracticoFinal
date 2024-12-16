@@ -22,7 +22,7 @@ router.get('/usuario/:usuarioId', auth, async (req, res) => {
     const reservas = await getReservasPorUsuario(usuarioId);
     if (reservas.length === 0) {
       res.status(404).json({ message: 'No se encontraron reservas para el usuario especificado.' });
-    } else {
+    } else {      
       res.status(200).json(reservas);
     }
   } catch (error) {

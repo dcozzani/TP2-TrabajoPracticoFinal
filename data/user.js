@@ -6,8 +6,18 @@ const DATABASE = "sample_airbnb";
 const LISTADOUSUARIOS = "users";
 
 export async function addUser(user) {
-  user.password = await bcryptjs.hash(user.password, 10);
   const clientMongo = await getConnection();
+
+  const existingUser = await clientMongo
+    .db(DATABASE)
+    .collection(LISTADOUSUARIOS)
+    .findOne({ email: user.email });
+
+  if (existingUser) {
+    throw new Error("El correo electrónico ya está registrado.");
+  }
+  user.password = await bcryptjs.hash(user.password, 10);
+  
 
   const result = clientMongo
     .db(DATABASE)
